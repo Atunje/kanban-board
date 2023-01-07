@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use DB;
 use App\Models\Column;
 use App\Http\Resources\ColumnResource;
+use Throwable;
 
 class ColumnService {
 
@@ -19,9 +20,20 @@ class ColumnService {
         return ColumnResource::collection(Column::all())->resource;
     }
 
-    public function delete(Column $column): bool|null
+    public function delete(Column $column): bool
     {
-        return $column->delete();
+        try {
+            DB::transaction(function () use ($column) {
+                //delete cards
+                $column->cards()->forceDelete();
+                //now delete card
+                $column->delete();
+            });
+
+            return true;
+        } catch (Throwable) {
+            return false;
+        }
     }
 
     public function update(Column $column, array $data): bool

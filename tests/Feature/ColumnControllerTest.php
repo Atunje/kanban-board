@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Card;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Column;
 use Illuminate\Testing\Fluent\AssertableJson;
@@ -79,12 +80,22 @@ class ColumnControllerTest extends TestCase
     {
         $column = Column::factory()->create();
 
+        for($n=1; $n<6; $n++) {
+            Card::factory()->create([
+                'position' => $n,
+                'column_id' => $column->id,
+            ]);
+        }
+
         $response = $this->deleteJson(route('columns.destroy', ['column' => $column]));
 
         $response->assertOk();
 
-        $column = Column::find($column->id);
-        $this->assertNull($column);
+        $deletedColumn = Column::find($column->id);
+        $this->assertNull($deletedColumn);
+
+        $cards = Card::where('column_id', $column->id)->get();
+        $this->assertEmpty($cards);
     }
 
     public function test_column_can_be_updated(): void
