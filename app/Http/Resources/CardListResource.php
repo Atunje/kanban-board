@@ -2,12 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Models\Column;
+use App\Models\Card;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-/** @mixin Column */
-class ColumnResource extends JsonResource
+/** @mixin Card */
+class CardListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +17,12 @@ class ColumnResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
+        return[
             'id' => $this->id,
             'title' => $this->title,
-            'cards' => CardListResource::collection($this->cards)->resource,
-            'created_at' => $this->created_at
+            'description' => $this->description,
+            'created_at' => $this->created_at,
+            'deleted_at' => $this->deleted_at
         ];
     }
 }

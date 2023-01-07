@@ -2,9 +2,9 @@
 
 namespace App\Http\Services;
 
-use App\Http\Resources\ColumnResource;
-use App\Models\Column;
 use DB;
+use App\Models\Column;
+use App\Http\Resources\ColumnResource;
 
 class ColumnService {
 

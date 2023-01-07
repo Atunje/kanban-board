@@ -69,7 +69,7 @@ class ColumnControllerTest extends TestCase
             $json->where('success', 1)
                 ->has('data', fn ($json) =>
                 $json->has('columns', $seeds)
-                    ->hasAll(['columns.0.id', 'columns.0.title'])
+                    ->hasAll(['columns.0.id', 'columns.0.title', 'columns.0.cards'])
                 )
                 ->etc()
             );

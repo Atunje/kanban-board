@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -27,6 +28,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @method static \Illuminate\Database\Eloquent\Builder|Column whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|Column withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Column withoutTrashed()
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Card[] $cards
+ * @property-read int|null $cards_count
  */
 class Column extends Model
 {
@@ -37,4 +40,9 @@ class Column extends Model
     protected $fillable = [
         'title',
     ];
+
+    public function cards(): HasMany
+    {
+        return $this->hasMany(Card::class);
+    }
 }

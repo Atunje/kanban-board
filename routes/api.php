@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,4 +23,10 @@ Route::get('/', function () {
 Route::resource('columns', ColumnController::class)->except([
     'create', 'show', 'edit'
 ]);
+
+Route::resource('cards', CardController::class)->only([
+    'store', 'update'
+]);
+
+Route::get('list-cards', [CardController::class, 'listing'])->name('cards.listing');
 
