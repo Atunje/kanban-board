@@ -15,18 +15,63 @@ class ColumnController extends Controller
         //
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/columns",
+     *      operationId="columns",
+     *      tags={"Columns"},
+     *      summary="Get all columns",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
     public function index(): JsonResponse
     {
         $columns = $this->columnService->getAll();
         return $this->jsonResponse(data: $columns, message: __('columns.all_fetched'), data_wrapper: 'columns');
     }
 
+    /**
+     * @OA\Post(
+     *      path="/api/columns",
+     *      operationId="createColumn",
+     *      tags={"Columns"},
+     *      summary="Create a new column",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "title"
+     *                  },
+     *                  @OA\Property(property="title", type="string")
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
     public function store(StoreColumnRequest $request): JsonResponse
     {
         $column = $this->columnService->create($request->validFields());
         return $this->jsonResponse(data: $column, message: __('columns.created'));
     }
 
+    /**
+     * @OA\Delete(
+     *      path="/api/columns/{id}",
+     *      operationId="deleteColumn",
+     *      tags={"Columns"},
+     *      summary="Delete column",
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
     public function destroy(Column $column): JsonResponse
     {
         if ($this->columnService->delete($column)) {
@@ -39,6 +84,29 @@ class ColumnController extends Controller
         );
     }
 
+    /**
+     * @OA\Put(
+     *      path="/api/columns/{id}",
+     *      operationId="updateColumn",
+     *      tags={"Columns"},
+     *      summary="Update column",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "title"
+     *                  },
+     *                  @OA\Property(property="title", type="string")
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
     public function update(Column $column, StoreColumnRequest $request): JsonResponse
     {
         if ($this->columnService->update($column, $request->validFields())) {
@@ -47,7 +115,7 @@ class ColumnController extends Controller
 
         return $this->jsonResponse(
             statusCode: Response::HTTP_INTERNAL_SERVER_ERROR,
-            message: __('columns.could_not_delete')
+            message: __('columns.could_not_update')
         );
     }
 }
