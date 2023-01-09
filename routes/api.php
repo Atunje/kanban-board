@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CardController;
 use App\Http\Controllers\ColumnController;
+use App\Http\Controllers\SqlDumpController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,7 +22,7 @@ Route::get('/', function () {
 })->name('app.index');
 
 Route::resource('columns', ColumnController::class)->except([
-    'create', 'show', 'edit'
+    'create', 'show', 'edit', 'update'
 ]);
 
 Route::resource('cards', CardController::class)->only([
@@ -29,4 +30,9 @@ Route::resource('cards', CardController::class)->only([
 ]);
 
 Route::get('list-cards', [CardController::class, 'listing'])->name('cards.listing');
+Route::patch('cards/{card}/shift', [CardController::class, 'shift'])->name('cards.shift');
+Route::patch('cards/{card}/add-to-column', [CardController::class, 'addToColumn'])->name('cards.add_to_column');
+
+Route::get('sql-dump', SqlDumpController::class)->name('sql.dump');
+
 
