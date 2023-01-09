@@ -83,39 +83,4 @@ class ColumnController extends Controller
             message: __('columns.could_not_delete')
         );
     }
-
-    /**
-     * @OA\Put(
-     *      path="/api/columns/{id}",
-     *      operationId="updateColumn",
-     *      tags={"Columns"},
-     *      summary="Update column",
-     *      @OA\RequestBody(
-     *          @OA\MediaType(
-     *              mediaType="application/x-www-form-urlencoded",
-     *              @OA\Schema(
-     *                  required={
-     *                      "title"
-     *                  },
-     *                  @OA\Property(property="title", type="string")
-     *              )
-     *          )
-     *      ),
-     *      @OA\Response(response=200, description="OK"),
-     *      @OA\Response(response=401, description="Unauthorized"),
-     *      @OA\Response(response=422, description="Unprocessable Entity"),
-     *      @OA\Response(response=500, description="Internal Server Error")
-     * )
-     */
-    public function update(Column $column, StoreColumnRequest $request): JsonResponse
-    {
-        if ($this->columnService->update($column, $request->validFields())) {
-            return $this->jsonResponse(message: __('columns.updated'));
-        }
-
-        return $this->jsonResponse(
-            statusCode: Response::HTTP_INTERNAL_SERVER_ERROR,
-            message: __('columns.could_not_update')
-        );
-    }
 }

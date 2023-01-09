@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class StoreCardRequest extends APIFormRequest
+class UpdateCardRequest extends APIFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,6 @@ class StoreCardRequest extends APIFormRequest
         return [
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'column_id' => 'required|integer|exists:columns,id',
         ];
     }
 }

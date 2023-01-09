@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddCardToColumnRequest;
+use App\Http\Requests\CardShiftRequest;
+use App\Http\Requests\ShiftCardRequest;
+use App\Http\Requests\UpdateCardRequest;
 use App\Models\Card;
 use Illuminate\Http\JsonResponse;
 use App\Http\Services\CardService;
 use App\Http\Requests\CardListRequest;
 use App\Http\Requests\StoreCardRequest;
-use App\Http\Requests\StoreColumnRequest;
 use Symfony\Component\HttpFoundation\Response;
 
 class CardController extends Controller
@@ -105,9 +108,86 @@ class CardController extends Controller
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(Card $card, StoreCardRequest $request): JsonResponse
+    public function update(Card $card, UpdateCardRequest $request): JsonResponse
     {
         if ($this->cardService->update($card, $request->validFields())) {
+            return $this->jsonResponse(message: __('cards.updated'));
+        }
+
+        return $this->jsonResponse(
+            statusCode: Response::HTTP_INTERNAL_SERVER_ERROR,
+            message: __('cards.could_not_update')
+        );
+    }
+
+    /**
+     * @OA\Patch(
+     *      path="/api/cards/{id}/shift",
+     *      operationId="updateCard",
+     *      tags={"Cards"},
+     *      summary="Update card",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "new_position",
+     *                  },
+     *                  @OA\Property(property="old_position", type="integer"),
+     *                  @OA\Property(property="new_position", type="integer")
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function shift(Card $card, CardShiftRequest $request): JsonResponse
+    {
+        //return $request->all();
+
+        if ($this->cardService->shiftCard($card, $request->integer('new_position'))) {
+            return $this->jsonResponse(message: __('cards.updated'));
+        }
+
+        return $this->jsonResponse(
+            statusCode: Response::HTTP_INTERNAL_SERVER_ERROR,
+            message: __('cards.could_not_update')
+        );
+    }
+
+    /**
+     * @OA\Patch(
+     *      path="/api/cards/{id}/add-to-column",
+     *      operationId="updateCard",
+     *      tags={"Cards"},
+     *      summary="Update card",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/x-www-form-urlencoded",
+     *              @OA\Schema(
+     *                  required={
+     *                      "column_id",
+     *                      "position",
+     *                  },
+     *                  @OA\Property(property="column_id", type="integer"),
+     *                  @OA\Property(property="position", type="integer")
+     *              )
+     *          )
+     *      ),
+     *      @OA\Response(response=200, description="OK"),
+     *      @OA\Response(response=401, description="Unauthorized"),
+     *      @OA\Response(response=422, description="Unprocessable Entity"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function addToColumn(Card $card, AddCardToColumnRequest $request): JsonResponse
+    {
+        if ($this->cardService->addCard(
+            $card, $request->integer('column_id'), $request->integer('position'))
+        ) {
             return $this->jsonResponse(message: __('cards.updated'));
         }
 

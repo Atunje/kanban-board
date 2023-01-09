@@ -35,9 +35,4 @@ class ColumnService {
             return false;
         }
     }
-
-    public function update(Column $column, array $data): bool
-    {
-        return $column->update($data);
-    }
 }

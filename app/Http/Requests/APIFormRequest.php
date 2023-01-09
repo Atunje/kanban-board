@@ -47,4 +47,10 @@ abstract class APIFormRequest extends FormRequest
     {
         return (array) $this->validated();
     }
+
+    public function integer($key, $default = 0): int
+    {
+        $field = $this->validFields();
+        return $field[$key] ?? $default;
+    }
 }

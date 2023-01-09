@@ -50,8 +50,6 @@ class CardControllerTest extends TestCase
             'position' => 1
         ]);
 
-        var_dump($response->json());
-
         $response->assertOk();
 
         $card = $card->refresh();

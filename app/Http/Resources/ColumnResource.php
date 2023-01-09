@@ -20,7 +20,7 @@ class ColumnResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'cards' => CardListResource::collection($this->cards)->resource,
+            'cards' => CardResource::collection($this->cards)->resource,
             'created_at' => $this->created_at
         ];
     }

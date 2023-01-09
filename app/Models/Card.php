@@ -98,4 +98,23 @@ class Card extends Model
 
         return $this;
     }
+
+    public function shiftUp(): bool
+    {
+        $this->position -= 1;
+        return $this->save();
+    }
+
+    public function shiftDown(): bool
+    {
+        $this->position += 1;
+        return $this->save();
+    }
+
+    public function setInPosition(int $position, Column $column = null): bool
+    {
+        $this->column_id = $column == null ? $this->column_id : $column->id;
+        $this->position = $position;
+        return $this->save();
+    }
 }
