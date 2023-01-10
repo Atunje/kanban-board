@@ -46,10 +46,7 @@ class Card extends Model
      */
     private Card|Builder $query;
 
-    /**
-     * @var Fluent
-     */
-    private Fluent $filterParams;
+    private array $filterParams;
 
     protected $table = "cards";
 
@@ -60,43 +57,50 @@ class Card extends Model
         'position'
     ];
 
-    /**
-     * @param Fluent $filterParams
-     * @return Collection
-     */
-    public static function getAll(Fluent $filterParams): Collection
+    public static function getAll(array $filterParams): Collection
     {
-        return (new self())->setInstanceParams($filterParams)
-                    ->addDateToQuery()
+        return self::createInstance($filterParams)
+                    ->queryByStatus()
+                    ->queryByDate()
                     ->query->get();
     }
 
-    private function addDateToQuery(): self
+    private function queryByStatus(): self
     {
-        if ($this->filterParams->__isset('date')) {
-            $this->query->whereDate('created_at', strval($this->filterParams->get('date')));
+        if (isset($this->filterParams['status'])) {
+            if (! $this->filterParams['status']) {
+                $this->query->onlyTrashed();
+            }
+        } else {
+            $this->query->withTrashed();
+        }
+
+        return $this;
+    }
+
+    private function queryByDate(): self
+    {
+        if (isset($this->filterParams['date'])) {
+            $this->query->whereDate('created_at', strval($this->filterParams['date']));
         }
 
         return $this;
     }
 
     /**
-     * initializes query and set filterParams on the current instance
+     * create instance, initializes query and set filterParams on the instance
      *
-     * @param Fluent $filterParams
+     * @param array $filterParams
      * @return self
      */
-    private function setInstanceParams(Fluent $filterParams): self
+    private static function createInstance(array $filterParams): self
     {
-        $this->filterParams = $filterParams;
+        $instance = new self();
+        $instance->filterParams = $filterParams;
 
-        if ($filterParams->__isset('status')) {
-            $this->query = ! $filterParams->get('status') ? self::onlyTrashed() : self::query();
-        } else {
-            $this->query = self::withTrashed();
-        }
+        $instance->query = $instance->query();
 
-        return $this;
+        return $instance;
     }
 
     public function shiftUp(): bool

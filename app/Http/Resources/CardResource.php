@@ -22,6 +22,7 @@ class CardResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'position' => $this->position,
+            'column_id' => $this->column_id,
             'created_at' => $this->created_at,
         ];
     }

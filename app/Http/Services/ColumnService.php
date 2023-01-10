@@ -25,7 +25,7 @@ class ColumnService {
         try {
             DB::transaction(function () use ($column) {
                 //delete cards
-                $column->cards()->forceDelete();
+                $column->cards()->delete();
                 //now delete card
                 $column->delete();
             });

@@ -26,7 +26,6 @@ class CardService {
 
     public function listCards(array $filterParams): mixed
     {
-        $filterParams = new Fluent($filterParams);
         return CardListResource::collection(Card::getAll($filterParams))->resource;
     }
 

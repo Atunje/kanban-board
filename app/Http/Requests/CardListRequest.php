@@ -12,7 +12,7 @@ class CardListRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'status' => 'nullable|integer|max:1',
+            'status' => 'nullable|boolean',
             'date' => 'nullable|date'
         ];
     }
