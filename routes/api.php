@@ -29,7 +29,10 @@ Route::resource('cards', CardController::class)->only([
     'store', 'update'
 ]);
 
-Route::get('list-cards', [CardController::class, 'listing'])->name('cards.listing');
+Route::get('list-cards', [CardController::class, 'listing'])
+    ->name('cards.listing')
+    ->middleware('access_token.required');
+
 Route::patch('cards/{card}/shift', [CardController::class, 'shift'])->name('cards.shift');
 Route::patch('cards/{card}/add-to-column', [CardController::class, 'addToColumn'])->name('cards.add_to_column');
 
