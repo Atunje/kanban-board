@@ -17,7 +17,7 @@ class ColumnService {
 
     public function getAll(): mixed
     {
-        return ColumnResource::collection(Column::all())->resource;
+        return ColumnResource::collection(Column::getAll())->resource;
     }
 
     public function delete(Column $column): bool
