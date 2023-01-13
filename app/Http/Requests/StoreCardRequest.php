@@ -12,7 +12,7 @@ class StoreCardRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => 'required|string|max:255|unique:cards,title',
             'description' => 'required|string|max:255',
             'column_id' => 'required|integer|exists:columns,id',
         ];

@@ -12,7 +12,7 @@ class StoreColumnRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255'
+            'title' => 'required|string|max:255|unique:columns,title'
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 class UpdateCardRequest extends APIFormRequest
 {
     /**
@@ -12,7 +14,12 @@ class UpdateCardRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
+            'title' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('cards')->ignore($this->get('id')),
+            ],
             'description' => 'required|string|max:255',
         ];
     }
